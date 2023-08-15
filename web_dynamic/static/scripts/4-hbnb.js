@@ -61,7 +61,6 @@ function filterPlaces (url, amenitiesList) {
           for (jsonAmenity of data) {
             amenityNames.push(jsonAmenity.name)
           }
-
           if (amenities.every(amenity => amenityNames.includes(amenity))) {
             displayPlace(place);
             console.log('found one! - ', place.name);
