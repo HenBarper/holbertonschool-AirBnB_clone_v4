@@ -41,38 +41,7 @@ function places (url) {
     data: JSON.stringify({}),
     success: function(data) {
       for (const place of data) {
-        $.get('http://127.0.0.1:5001/api/v1/users/' + place.user_id, function (userData) {
-          let guestsPlural = '';
-          if (place.max_guest != 1) {
-            let guestsPlural ='s';
-          }
-          let roomsPlural = ''
-          if (place.number_rooms != 1) {
-            let roomsPlural ='s';
-          }
-          let bathroomPlural = ''
-          if (place.number_bathrooms != 1) {
-            let bathroomPlural ='s';
-          }
-          let html = `<article>
-          <div class="title_box">
-            <h2>${place.name}</h2>
-            <div class="price_by_night">$${place.price_by_night}</div>
-          </div>
-          <div class="information">
-            <div class="max_guest">${place.max_guest} Guest${guestsPlural}</div>
-                  <div class="number_rooms">${place.number_rooms } Bedroom${roomsPlural}</div>
-                  <div class="number_bathrooms">${place.number_bathrooms} Bathroom${bathroomPlural}</div>
-          </div>
-          <div class="user">
-                  <b>Owner:</b> ${userData.first_name} ${userData.last_name}
-                </div>
-                <div class="description">
-            ${place.description}
-                </div>
-            </article>`;
-        $('.places').append(html);
-        });
+        displayPlace(place);
       }
     }
   });
@@ -87,43 +56,52 @@ function filterPlaces (url, amenitiesList) {
     data: JSON.stringify({}),
     success: function(data) {
       for (const place of data) {
-        let matches = false;
-        for (let i = 0; i < amenitiesList.length; i++) {
-          if (place.) {}
-        }
-        $.get('http://127.0.0.1:5001/api/v1/users/' + place.user_id + '/' + amenitiesList, function (userData) {
-          let guestsPlural = '';
-          if (place.max_guest != 1) {
-            let guestsPlural ='s';
+        $.get('http://127.0.0.1:5001/api/v1/places/' + place.id + '/amenities', function (data) {
+          const amenityNames = []
+          for (jsonAmenity of data) {
+            amenityNames.push(jsonAmenity.name)
           }
-          let roomsPlural = ''
-          if (place.number_rooms != 1) {
-            let roomsPlural ='s';
+          if (amenities.every(amenity => amenityNames.includes(amenity))) {
+            displayPlace(place);
+            console.log('found one! - ', place.name);
           }
-          let bathroomPlural = ''
-          if (place.number_bathrooms != 1) {
-            let bathroomPlural ='s';
-          }
-          let html = `<article>
-          <div class="title_box">
-            <h2>${place.name}</h2>
-            <div class="price_by_night">$${place.price_by_night}</div>
-          </div>
-          <div class="information">
-            <div class="max_guest">${place.max_guest} Guest${guestsPlural}</div>
-                  <div class="number_rooms">${place.number_rooms } Bedroom${roomsPlural}</div>
-                  <div class="number_bathrooms">${place.number_bathrooms} Bathroom${bathroomPlural}</div>
-          </div>
-          <div class="user">
-                  <b>Owner:</b> ${userData.first_name} ${userData.last_name}
-                </div>
-                <div class="description">
-            ${place.description}
-                </div>
-            </article>`;
-        $('.places').append(html);
         });
       }
     }
+  });
+}
+
+function filterPlaces (url, amenitiesList) {
+  $.get('http://127.0.0.1:5001/api/v1/users/' + place.user_id + '/' + amenitiesList, function (userData) {
+    let guestsPlural = '';
+    if (place.max_guest != 1) {
+      let guestsPlural ='s';
+    }
+    let roomsPlural = ''
+    if (place.number_rooms != 1) {
+      let roomsPlural ='s';
+    }
+    let bathroomPlural = ''
+    if (place.number_bathrooms != 1) {
+      let bathroomPlural ='s';
+    }
+    let html = `<article>
+    <div class="title_box">
+      <h2>${place.name}</h2>
+      <div class="price_by_night">$${place.price_by_night}</div>
+    </div>
+    <div class="information">
+      <div class="max_guest">${place.max_guest} Guest${guestsPlural}</div>
+            <div class="number_rooms">${place.number_rooms } Bedroom${roomsPlural}</div>
+            <div class="number_bathrooms">${place.number_bathrooms} Bathroom${bathroomPlural}</div>
+    </div>
+    <div class="user">
+            <b>Owner:</b> ${userData.first_name} ${userData.last_name}
+          </div>
+          <div class="description">
+      ${place.description}
+          </div>
+      </article>`;
+  $('.places').append(html);
   });
 }
