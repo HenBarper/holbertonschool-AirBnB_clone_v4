@@ -47,7 +47,7 @@ function places (url) {
   });
 }
 
-function filterPlaces (url, amenitiesList) {
+function filterPlace (url, amenitiesList) {
   $.ajax({
     url: url,
     type: 'POST',
@@ -71,7 +71,7 @@ function filterPlaces (url, amenitiesList) {
   });
 }
 
-function filterPlaces (url, amenitiesList) {
+function displayPlace (url, amenitiesList) {
   $.get('http://127.0.0.1:5001/api/v1/users/' + place.user_id + '/' + amenitiesList, function (userData) {
     let guestsPlural = '';
     if (place.max_guest != 1) {
